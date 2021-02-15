@@ -18,7 +18,7 @@ export class ConfigService implements ExpressCassandraOptionsFactory{
         return {
           clientOptions: {
             contactPoints: ['localhost'],
-            keyspace: 'employeedb',
+            keyspace: 'vip',
             protocolOptions: {
               port: 9042,
             },

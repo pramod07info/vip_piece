@@ -11,7 +11,7 @@ import { CreatePieceDto } from './dto/create-piece.dto';
 @Injectable()
 export class AppService {
   constructor(
-    @InjectConnection('employeedb')
+    @InjectConnection('vip')
     private readonly connection: any,
     // inject CatEntity from connection=test2
     @InjectModel(PieceEntity) private readonly pieceModel: BaseModel<PieceEntity>,
