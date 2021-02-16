@@ -27,40 +27,44 @@ export class UsersController {
   }
   @Post('/login')
   login(@Body() createUsersDto: CreateUsersDto) {
-    try {
-      let user = this.usersService.login(createUsersDto);
-      user.then(function (result) {
-        if (result != null) {
-          const iResponse: IResponse = {
-            statusCode: "200",
-            message: "Successfully Login",
-            data: result
-          }
-          return iResponse;
-        } else {
-          const iResponse: IResponse = {
-            statusCode: "200",
-            message: "Successfully Login",
-            data: result
-          }
-          return iResponse;
-        }
-      })
-    } catch (error) {
-      console.error(error.message);
-      const iResponse: IResponse = {
-        statusCode: "500",
-        message: "Something went worng",
-        error: error.message
-      }
-      return iResponse;
-    }
+    let user = this.usersService.login(createUsersDto);
+    return user;
+    //try {
+     
+    //   user.then(function (result) {
+        
+    //   //   if (result.token) {
+    //   //     console.log("tokenddd ",result)
+    //   //     const iResponse: IResponse = {
+    //   //       statusCode: "200",
+    //   //       message: "Successfully Login",
+            
+    //   //     }
+    //   //     return iResponse;
+    //   //   } else {
+    //   //     const iResponse: IResponse = {
+    //   //       statusCode: "200",
+    //   //       message: "Successfully Login",
+    //   //       data: result
+    //   //     }
+    //   //     return iResponse;
+    //   //   }
+    //   // })
+      
+    // } catch (error) {
+    //   console.error(error.message);
+    //   const iResponse: IResponse = {
+    //     statusCode: "500",
+    //     message: "Something went worng",
+    //     error: error.message
+    //   }
+    //   return iResponse;
+    //}
   }
   @Post('/logout')
   logout(@Body() createUsersTokenDto: CreateUsersTokenDto) {
     try {
-      console.log("tokenData ", createUsersTokenDto)
-      let user = this.usersService.logout(createUsersTokenDto.userId);
+      this.usersService.logout(createUsersTokenDto.userId);
       const iResponse: IResponse = {
         statusCode: "200",
         message: "Successfully Logout"

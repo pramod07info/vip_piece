@@ -39,33 +39,35 @@ export class UsersService {
     console.log("create User Dto", createUsersDto.password)
     
     let userResult = await this.usersModel.findOneAsync({emailId:createUsersDto.emailId,password:createUsersDto.password},{raw: true,allow_filtering:true,select:['id','name','nickName','roles']});
+    let tokens ={
+      token:"",
+      userId:""
+    }
     if(userResult != null){
-      let tokens ={
-        token:"",
-        userId:""
-      }
+     
       let tokenDataResult = await this.usersTokenService.findByUserId(userResult.id);  
+      
       if(tokenDataResult != null){
         tokens.token = tokenDataResult.tokenData;
         tokens.userId = tokenDataResult.userId;
-        return tokens;
+        console.log("userResult",tokenDataResult);
       }else{
         let createUsersTokenDto = new CreateUsersTokenDto();
-        
-        createUsersTokenDto.userId = userResult.id; //'++';
+        createUsersTokenDto.userId = userResult.id;
         createUsersTokenDto.tokenData = uuid()+""+ uuid();
         createUsersTokenDto.isActive = true;
         this.usersTokenService.create(createUsersTokenDto);
         tokens.token = createUsersTokenDto.tokenData;
         tokens.userId = createUsersTokenDto.userId;
-        return tokens;
+        
       }
     }
-    
+    return tokens;
   }
   async  logout(id) {
     console.log("id ",id)  
-    let tokenDataResult = await this.usersTokenService.updateTokenStatus(id);  
+    let tokenDataResult = await this.usersTokenService.updateTokenStatus(id);
+
   }
   
 }
