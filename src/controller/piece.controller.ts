@@ -6,7 +6,10 @@ import { ParseUuidPipe } from '../pipes/parse-uuid.pipe'
 
 @Controller('piece')
 export class PieceController {
-  constructor(private readonly pieceService: PieceService) {}
+  constructor(
+    private readonly pieceService: PieceService
+    
+    ) {}
 
   @Post()
   async create(@Body() createPieceDto: CreatePieceDto) {

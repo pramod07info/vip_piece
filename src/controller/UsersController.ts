@@ -1,12 +1,15 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { UsersService } from '../service/users.service';
 import { CreateUsersDto } from '../dto/create-users.dto'
+import { CreateUsersTokenDto } from '../dto/create-user-token.dto'
 import { UsersEntity } from '../entity/users.entity';
 import { ParseUuidPipe } from '../pipes/parse-uuid.pipe'
+import { UserTokenService } from 'src/service/user-token.service';
+import { IResponse } from '../response/IResponse';
 
 @Controller('user')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
   async create(@Body() createUsersDto: CreateUsersDto) {
@@ -21,5 +24,56 @@ export class UsersController {
   @Get(':id')
   findOne(@Param('id', new ParseUuidPipe()) id) {
     return this.usersService.findById(id);
+  }
+  @Post('/login')
+  login(@Body() createUsersDto: CreateUsersDto) {
+    try {
+      let user = this.usersService.login(createUsersDto);
+      user.then(function (result) {
+        if (result != null) {
+          const iResponse: IResponse = {
+            statusCode: "200",
+            message: "Successfully Login",
+            data: result
+          }
+          return iResponse;
+        } else {
+          const iResponse: IResponse = {
+            statusCode: "200",
+            message: "Successfully Login",
+            data: result
+          }
+          return iResponse;
+        }
+      })
+    } catch (error) {
+      console.error(error.message);
+      const iResponse: IResponse = {
+        statusCode: "500",
+        message: "Something went worng",
+        error: error.message
+      }
+      return iResponse;
+    }
+  }
+  @Post('/logout')
+  logout(@Body() createUsersTokenDto: CreateUsersTokenDto) {
+    try {
+      console.log("tokenData ", createUsersTokenDto)
+      let user = this.usersService.logout(createUsersTokenDto.userId);
+      const iResponse: IResponse = {
+        statusCode: "200",
+        message: "Successfully Logout"
+      }
+      return iResponse;
+    } catch (error) {
+      console.error(error.message);
+      const iResponse: IResponse = {
+        statusCode: "500",
+        message: "Something went worng",
+        error: error.message
+      }
+      return iResponse;
+    }
   }
 }

@@ -5,8 +5,8 @@ import {
   } from '@iaminfinity/express-cassandra';
   
   @Entity({
-    table_name: 'users',
-    key: ['id'],
+    table_name: 'usertoken',
+    key: ['id','userId'],
     options: {
       timestamps: {
         createdAt: 'created_at',
@@ -17,42 +17,22 @@ import {
       // },
     },
   })
-  export class UsersEntity {
+  export class UserTokenEntity {
     @GeneratedUUidColumn()
     id: any;
   
     @Column({
-      type: 'text',
+      type: 'uuid',
     })
-    name: string;
+    userId: any;
   
     @Column({
       type: 'text',
     })
-    nickName: string;
-  
-    @Column({
-      type: 'text',
-    })
-    mobile: string;
-
-    @Column({
-        type: 'text',
-      })
-    emailId: string;
-
-    @Column({
-        type: 'text',
-    })
-    password: string;
+    tokenData: string;
 
     @Column({
         type: 'boolean',
     })
     isActive: boolean;
-
-    @Column({
-      type: 'text',
-    })
-    roles: Set<any>;
   }

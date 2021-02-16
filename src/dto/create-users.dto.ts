@@ -5,4 +5,5 @@ export class CreateUsersDto {
     readonly mobile: string;
     readonly password: string;
     readonly isActive: boolean;
+    readonly roles: any;
   }
