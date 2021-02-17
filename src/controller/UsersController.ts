@@ -25,41 +25,13 @@ export class UsersController {
   findOne(@Param('id', new ParseUuidPipe()) id) {
     return this.usersService.findById(id);
   }
+  @Post('/update')
+  updateUser(@Body() createUsersDto:CreateUsersDto){
+    return this.usersService.updateUser(createUsersDto);
+  }
   @Post('/login')
   login(@Body() createUsersDto: CreateUsersDto) {
-    let user = this.usersService.login(createUsersDto);
-    return user;
-    //try {
-     
-    //   user.then(function (result) {
-        
-    //   //   if (result.token) {
-    //   //     console.log("tokenddd ",result)
-    //   //     const iResponse: IResponse = {
-    //   //       statusCode: "200",
-    //   //       message: "Successfully Login",
-            
-    //   //     }
-    //   //     return iResponse;
-    //   //   } else {
-    //   //     const iResponse: IResponse = {
-    //   //       statusCode: "200",
-    //   //       message: "Successfully Login",
-    //   //       data: result
-    //   //     }
-    //   //     return iResponse;
-    //   //   }
-    //   // })
-      
-    // } catch (error) {
-    //   console.error(error.message);
-    //   const iResponse: IResponse = {
-    //     statusCode: "500",
-    //     message: "Something went worng",
-    //     error: error.message
-    //   }
-    //   return iResponse;
-    //}
+    return  this.usersService.login(createUsersDto);
   }
   @Post('/logout')
   logout(@Body() createUsersTokenDto: CreateUsersTokenDto) {

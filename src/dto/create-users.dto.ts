@@ -1,4 +1,5 @@
 export class CreateUsersDto {
+    readonly id: string;
     readonly name: string;
     readonly nickName: string;
     readonly emailId: string;
