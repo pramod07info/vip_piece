@@ -1,10 +1,10 @@
 export class CreateUsersDto {
     readonly id: string;
     readonly name: string;
-    readonly nickName: string;
-    readonly emailId: string;
+    readonly nick_name: string;
+    readonly email_id: string;
     readonly mobile: string;
     readonly password: string;
-    readonly isActive: boolean;
+    readonly is_active: boolean;
     readonly roles: any;
   }

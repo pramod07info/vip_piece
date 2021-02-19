@@ -29,7 +29,7 @@ import {
     @Column({
       type: 'text',
     })
-    nickName: string;
+    nick_name: string;
   
     @Column({
       type: 'text',
@@ -39,7 +39,7 @@ import {
     @Column({
         type: 'text',
       })
-    emailId: string;
+    email_id: string;
 
     @Column({
         type: 'text',
@@ -49,7 +49,7 @@ import {
     @Column({
         type: 'boolean',
     })
-    isActive: boolean;
+    is_active: boolean;
 
     @Column({
       type: 'text',

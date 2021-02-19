@@ -6,7 +6,7 @@ import {
   
   @Entity({
     table_name: 'usertoken',
-    key: ['id','userId'],
+    key: ['id','user_id'],
     options: {
       timestamps: {
         createdAt: 'created_at',
@@ -24,15 +24,15 @@ import {
     @Column({
       type: 'uuid',
     })
-    userId: any;
+    user_id: any;
   
     @Column({
       type: 'text',
     })
-    tokenData: string;
+    token_data: string;
 
     @Column({
         type: 'boolean',
     })
-    isActive: boolean;
+    is_active: boolean;
   }

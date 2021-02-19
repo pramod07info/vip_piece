@@ -22,7 +22,7 @@ export class UserTokenService {
   ) {}
   
   async create(createUsersTokenDto: CreateUsersTokenDto): Promise<UserTokenEntity> {
-    const userTokens = new this.usersTokenModel(createUsersTokenDto);
+    const userTokens = await new this.usersTokenModel(createUsersTokenDto);
     return await userTokens.saveAsync();
   }
   
@@ -37,15 +37,15 @@ export class UserTokenService {
     return await this.usersTokenModel.findOneAsync({ id }, { raw: true });
   }
   async findByUserId(id): Promise<UserTokenEntity> {    
-    return await this.usersTokenModel.findOneAsync({ userId:id,isActive:true }, { raw: true ,select:['id','userId','tokenData'],allow_filtering:true});
+    return await this.usersTokenModel.findOneAsync({ user_id:id,is_active:true }, { raw: true ,select:['id','user_id','token_data'],allow_filtering:true});
   }
   async updateTokenStatus(id) {
         if (typeof id === 'string') {
             id = uuid(id);
         }
-        let tokenData =   await this.usersTokenModel.findOneAsync({ userId:id,isActive:true }, { raw: true ,select:['id','userId','tokenData'],allow_filtering:true});
+        let tokenData =   await this.usersTokenModel.findOneAsync({ user_id:id,is_active:true }, { raw: true ,select:['id','user_id','token_data'],allow_filtering:true});
         if(tokenData != null){
-            await this.usersTokenModel.update({id:tokenData.id,userId:id},{isActive:false})
+            await this.usersTokenModel.update({id:tokenData.id,user_id:id},{is_active:false})
         }  
     }
 }

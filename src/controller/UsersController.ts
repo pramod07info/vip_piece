@@ -36,7 +36,7 @@ export class UsersController {
   @Post('/logout')
   logout(@Body() createUsersTokenDto: CreateUsersTokenDto) {
     try {
-      this.usersService.logout(createUsersTokenDto.userId);
+      this.usersService.logout(createUsersTokenDto.user_id);
       const iResponse: IResponse = {
         statusCode: "200",
         message: "Successfully Logout"

@@ -14,14 +14,15 @@ import { IResponse } from 'src/response/IResponse';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectConnection()
-    private readonly connection: any,
+    // @InjectConnection()
+    // private readonly connection: any,
     @InjectModel(UsersEntity)
     private readonly usersModel: BaseModel<UsersEntity>,
     private readonly usersTokenService: UserTokenService
   ) { }
 
   async create(createUsersDto: CreateUsersDto): Promise<UsersEntity> {
+    
     const piece = new this.usersModel(createUsersDto);
     return await piece.saveAsync();
   }
@@ -43,7 +44,7 @@ export class UsersService {
       // }
       let userData = await this.usersModel.findOneAsync({ id: uuid(createUsersDto.id) }, { raw: true });
       if (userData != null) {
-        this.usersModel.update({ id: uuid(createUsersDto.id) }, { emailId: createUsersDto.emailId, name: createUsersDto.name, mobile: createUsersDto.mobile, isActive: createUsersDto.isActive, roles: createUsersDto.roles });
+        this.usersModel.update({ id: uuid(createUsersDto.id) }, { email_id: createUsersDto.email_id, name: createUsersDto.name, mobile: createUsersDto.mobile, is_active: createUsersDto.is_active, roles: createUsersDto.roles });
         let user = await this.usersModel.findOneAsync({ id: uuid(createUsersDto.id) }, { raw: true });
         if (user) {
           const iResponse: IResponse = {
@@ -81,61 +82,74 @@ export class UsersService {
 
   }
   async login(createUsersDto: CreateUsersDto) {
-    console.log("create User Dto", createUsersDto.emailId)
-    console.log("create User Dto", createUsersDto.password)
+    try {
+      console.log("create User Dto", createUsersDto.email_id)
+      console.log("create User Dto", createUsersDto.password)
 
-    let userResult = await this.usersModel.findOneAsync({ emailId: createUsersDto.emailId, password: createUsersDto.password }, { raw: true, allow_filtering: true, select: ['id', 'name', 'nickName', 'roles'] });
-    let tokens = {
-      token: "",
-      userId: ""
-    }
-    if (userResult != null) {
-
-      let tokenDataResult = await this.usersTokenService.findByUserId(userResult.id);
-
-      if (tokenDataResult != null) {
-        tokens.token = tokenDataResult.tokenData;
-        tokens.userId = tokenDataResult.userId;
-        console.log("userResult", tokenDataResult);
-        const iResponse: IResponse = {
-          statusCode: "200",
-          message: "Login successfully",
-          data: tokens
-        }
-        return iResponse;
-      } else {
-        let createUsersTokenDto = new CreateUsersTokenDto();
-        createUsersTokenDto.userId = userResult.id;
-        createUsersTokenDto.tokenData = uuid() + "" + uuid();
-        createUsersTokenDto.isActive = true;
-        this.usersTokenService.create(createUsersTokenDto);
-        tokens.token = createUsersTokenDto.tokenData;
-        tokens.userId = createUsersTokenDto.userId;
-        tokens.token = tokenDataResult.tokenData;
-        tokens.userId = tokenDataResult.userId;
-        console.log("userResult", tokenDataResult);
-        const iResponse: IResponse = {
-          statusCode: "200",
-          message: "Login successfully",
-          data: tokens
-        }
-        return iResponse;
-
+      let userResult = await this.usersModel.findOneAsync({ email_id: createUsersDto.email_id, password: createUsersDto.password }, { raw: true, allow_filtering: true, select: ['id', 'name', 'nick_name', 'roles'] });
+      let tokens = {
+        token: "",
+        userId: ""
       }
-    } else {
+      if (userResult != null) {
+        let tokenDataResult = await this.usersTokenService.findByUserId(userResult.id);
+        if (tokenDataResult != null) {
+          tokens.token = tokenDataResult.token_data;
+          tokens.userId = tokenDataResult.user_id;
+          console.log("userResult", tokenDataResult);
+          const iResponse: IResponse = {
+            statusCode: "200",
+            message: "Login successfully",
+            data: tokens
+          }
+          return iResponse;
+        } else {
+          let createUsersTokenDto = new CreateUsersTokenDto();
+          createUsersTokenDto.user_id = userResult.id;
+          createUsersTokenDto.token_data = uuid() + "" + uuid();
+          createUsersTokenDto.is_active = true;
+          await this.usersTokenService.create(createUsersTokenDto);
+          tokens.token = createUsersTokenDto.token_data;
+          tokens.userId = createUsersTokenDto.user_id;
+          tokens.token = tokenDataResult.token_data;
+          tokens.userId = tokenDataResult.user_id;
+          console.log("userResult", tokenDataResult);
+          const iResponse: IResponse = {
+            statusCode: "200",
+            message: "Login successfully",
+            data: tokens
+          }
+          return iResponse;
+        }
+      } else {
+        const iResponse: IResponse = {
+          statusCode: "200",
+          message: "Emailid Or Password not matched",
+          data: tokens
+        }
+        return iResponse;
+      }
+    } catch (error) {
       const iResponse: IResponse = {
         statusCode: "200",
-        message: "Emailid Or Password not matched",
-        data: tokens
+        message: error.message,
+        data: ""
       }
       return iResponse;
     }
-
   }
   async logout(id) {
-    console.log("id ", id)
-    let tokenDataResult = await this.usersTokenService.updateTokenStatus(id);
-
+    try {
+      let tokenDataResult = await this.usersTokenService.updateTokenStatus(id);
+    } catch (error) {
+      const iResponse: IResponse = {
+        statusCode: "200",
+        message: error.message,
+        data: ""
+      }
+      return iResponse;
+    }
+    
   }
 
 }
