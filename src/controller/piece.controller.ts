@@ -22,8 +22,12 @@ export class PieceController {
     return this.pieceService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id', new ParseUuidPipe()) id) {
-    return this.pieceService.findById(id);
+  @Get('/callback')
+  async find() {
+    
+  }
+  @Get()
+  findOne() {
+    
   }
 }

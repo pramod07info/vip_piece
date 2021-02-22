@@ -91,9 +91,12 @@ export class PieceService {
 					if(videoInfo != null){						
 						
 						console.log("video ",videoInfo);
-						let createPieceDto:CreatePieceDto;
-						createPieceDto.id = piece.id;
-						
+						let createPieceDto:CreatePieceDto = {id:'',
+							category_id:0,title:'',user_id:'',source_piece:'',
+							video_info:'',
+							status:'',
+						};
+						createPieceDto.id = piece.id;						
 						createPieceDto.category_id = piece.category_id;
 						createPieceDto.title = piece.title;
 						createPieceDto.user_id = piece.user_id;
@@ -105,7 +108,7 @@ export class PieceService {
 				const iResponse: IResponse = {
 					statusCode: "200",
 					message:"Fetch Successfully data",
-					data: pieces
+					data: createPieceDtoArray
 				}
 				return iResponse;
 			}
